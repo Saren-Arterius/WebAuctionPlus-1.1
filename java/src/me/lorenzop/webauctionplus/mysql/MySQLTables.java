@@ -55,9 +55,9 @@ public class MySQLTables {
         // update 1.0 to 1.1
         if (setColumnExists("Players", "Locked", "tinyint(1)   DEFAULT '0'")) {
             setColumnExists("Auctions", "enchantments",
-                    "varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL");
+                    "TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL");
             setColumnExists("Items", "enchantments",
-                    "varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL");
+                    "TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL");
             ConvertDatabase1_1_1();
         }
         setColumnExists("Auctions", "itemTitle",
@@ -110,7 +110,7 @@ public class MySQLTables {
                         + "`itemId`			INT    (11)		NOT NULL	DEFAULT '0'		, "
                         + "`itemDamage`		INT    (11)		NOT NULL	DEFAULT '0'		, "
                         + "`qty`				INT    (11)		NOT NULL	DEFAULT '0'		, "
-                        + "`enchantments`		VARCHAR(255)	NULL		DEFAULT NULL	, "
+                        + "`enchantments`		TEXT	NULL		DEFAULT NULL	, "
                         + "`price`			DECIMAL(11,2)	NOT NULL	DEFAULT '0.00'	, "
                         + "`created`			DATETIME		NOT NULL	DEFAULT '0000-00-00 00:00:00', "
                         + "`allowBids`		TINYINT(1)		NOT NULL	DEFAULT '0'		, "
@@ -134,7 +134,7 @@ public class MySQLTables {
                         + "`itemId`			INT    (11)		NOT NULL	DEFAULT '0'		, "
                         + "`itemDamage`		INT    (11)		NOT NULL	DEFAULT '0'		, "
                         + "`qty`				INT    (11)		NOT NULL	DEFAULT '0'		, "
-                        + "`enchantments`		VARCHAR(255)	NULL		DEFAULT NULL	, "
+                        + "`enchantments`		TEXT	NULL		DEFAULT NULL	, "
                         + "`itemTitle`		VARCHAR(32)		NULL		DEFAULT NULL	");
             }
         } else if (tableName.equals("Players")) {
@@ -227,7 +227,7 @@ public class MySQLTables {
                         + "`itemType`			ENUM('', 'tool','map','book')	NULL	DEFAULT NULL	, "
                         + "`itemId`			INT(11)			NOT NULL	DEFAULT 0		, "
                         + "`itemDamage`		INT(11)			NOT NULL	DEFAULT 0		, "
-                        + "`enchantments`		VARCHAR(255)	NULL		DEFAULT NULL	, "
+                        + "`enchantments`		TEXT	NULL		DEFAULT NULL	, "
                         + "`itemTitle`		VARCHAR(32)		NULL		DEFAULT NULL	, "
                         + "`seller`			VARCHAR(16)		NULL		DEFAULT NULL	, "
                         + "`buyer`			VARCHAR(16)		NULL		DEFAULT NULL	, " + "`qty`				INT(11)			NOT NULL	DEFAULT 0		, "

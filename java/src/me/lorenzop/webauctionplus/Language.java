@@ -2,7 +2,6 @@ package me.lorenzop.webauctionplus;
 
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -70,8 +69,7 @@ public class Language {
                     return;
                 }
             } else {
-                final YamlConfiguration defaultLangConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(
-                        defaultLangStream));
+                final YamlConfiguration defaultLangConfig = YamlConfiguration.loadConfiguration(defaultLangStream);
                 // copy defaults
                 langConfig.setDefaults(defaultLangConfig);
             }

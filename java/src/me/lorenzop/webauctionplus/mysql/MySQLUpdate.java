@@ -49,9 +49,9 @@ public class MySQLUpdate {
             final String[] queries = new String[] {
                     // enchantment/meta fields
                     "ALTER TABLE `" + WebAuctionPlus.dataQueries.dbPrefix()
-                            + "Auctions` CHANGE `enchantments` `enchantments` VARCHAR(255) NULL DEFAULT NULL",
+                            + "Auctions` CHANGE `enchantments` `enchantments` TEXT NULL DEFAULT NULL",
                     "ALTER TABLE `" + WebAuctionPlus.dataQueries.dbPrefix()
-                            + "Items`    CHANGE `enchantments` `enchantments` VARCHAR(255) NULL DEFAULT NULL",
+                            + "Items`    CHANGE `enchantments` `enchantments` TEXT NULL DEFAULT NULL",
                     // enums
                     "ALTER TABLE `"
                             + WebAuctionPlus.dataQueries.dbPrefix()

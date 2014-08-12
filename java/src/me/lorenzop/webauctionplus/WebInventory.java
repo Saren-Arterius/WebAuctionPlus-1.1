@@ -262,7 +262,7 @@ public class WebInventory {
         }
         // add enchantments
         if (enchStr != null && !enchStr.isEmpty()) {
-            WebItemMeta.decodeEnchants(stack, player, enchStr);
+            WebItemMeta.decodeItem(stack, player, enchStr);
         }
         return stack;
     }
@@ -307,17 +307,14 @@ public class WebInventory {
             final int itemId = WebInventory.getTypeId(stack);
             final short itemDamage = stack.getDurability();
             final int itemQty = stack.getAmount();
-            final String enchStr = WebItemMeta.encodeEnchants(stack, player);
+            final String enchStr = WebItemMeta.encodeItem(stack, player);
 
             // update existing item
             if (tableRowIds.containsKey(i)) {
                 try {
                     WebAuctionPlus.getLog().debug("WA Query: saveInventory::update slot " + Integer.toString(i));
-                    st = conn
-                            .prepareStatement("UPDATE `"
-                                    + WebAuctionPlus.dataQueries.dbPrefix()
-                                    + "Items` SET "
-                                    + "`itemId` = ?, `itemDamage` = ?, `qty` = ?, `enchantments` = ? WHERE `id` = ? LIMIT 1");
+                    st = conn.prepareStatement("UPDATE `" + WebAuctionPlus.dataQueries.dbPrefix() + "Items` SET "
+                            + "`itemId` = ?, `itemDamage` = ?, `qty` = ?, `enchantments` = ? WHERE `id` = ? LIMIT 1");
                     st.setInt(1, itemId);
                     st.setShort(2, itemDamage);
                     st.setInt(3, itemQty);
@@ -337,11 +334,8 @@ public class WebInventory {
             }
             try {
                 WebAuctionPlus.getLog().debug("WA Query: saveInventory::insert slot " + Integer.toString(i));
-                st = conn
-                        .prepareStatement("INSERT INTO `"
-                                + WebAuctionPlus.dataQueries.dbPrefix()
-                                + "Items` ( "
-                                + "`playerName`, `itemId`, `itemDamage`, `qty`, `enchantments` )VALUES( ?, ?, ?, ?, ? )");
+                st = conn.prepareStatement("INSERT INTO `" + WebAuctionPlus.dataQueries.dbPrefix() + "Items` ( "
+                        + "`playerName`, `itemId`, `itemDamage`, `qty`, `enchantments` )VALUES( ?, ?, ?, ?, ? )");
                 st.setString(1, playerName);
                 st.setInt(2, itemId);
                 st.setShort(3, itemDamage);

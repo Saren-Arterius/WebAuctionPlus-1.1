@@ -1,7 +1,5 @@
 package me.lorenzop.webauctionplus;
 
-import java.security.Permissions;
-
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 
@@ -29,10 +27,9 @@ public class Plugins3rdParty {
     /**
      * Vault
      */
-    private Plugin      vault = null;
-    private Chat        chat  = null;
-    private Economy     econ  = null;
-    private Permissions perm  = null;
+    private Plugin  vault = null;
+    private Chat    chat  = null;
+    private Economy econ  = null;
 
     private boolean setupVault() {
         vault = Bukkit.getPluginManager().getPlugin("Vault");
@@ -60,16 +57,6 @@ public class Plugins3rdParty {
                 log.warning("Failed to find economy plugin.");
             }
         }
-        // permissions
-        {
-            final RegisteredServiceProvider<Permissions> provider = service.getRegistration(Permissions.class);
-            perm = provider.getProvider();
-            if (perm == null) {
-                log.info("Found permissions plugin.");
-            } else {
-                log.warning("Failed to find permissions plugin.");
-            }
-        }
         return isLoaded_Vault();
     }
 
@@ -83,10 +70,6 @@ public class Plugins3rdParty {
 
     public Economy getEconomy() {
         return econ;
-    }
-
-    public Permissions getPerms() {
-        return perm;
     }
 
     // /**

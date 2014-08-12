@@ -51,7 +51,7 @@ public class waStats {
             try {
                 WebAuctionPlus.getLog().debug("WA Query: Stats::count buy nows");
                 st = conn.prepareStatement("SELECT COUNT(*) AS `count` FROM `" + WebAuctionPlus.dataQueries.dbPrefix()
-                        + "Auctions` WHERE `allow_bids` = 0");
+                        + "Auctions`");
                 rs = st.executeQuery();
                 if (rs.next()) {
                     totalBuyNowCount = rs.getInt("count");
@@ -72,7 +72,7 @@ public class waStats {
             try {
                 WebAuctionPlus.getLog().debug("WA Query: Stats::count auctions");
                 st = conn.prepareStatement("SELECT COUNT(*) AS `count` FROM `" + WebAuctionPlus.dataQueries.dbPrefix()
-                        + "Auctions` WHERE `allow_bids` != 0");
+                        + "Auctions`");
                 rs = st.executeQuery();
                 if (rs.next()) {
                     totalAuctionCount = rs.getInt("count");
