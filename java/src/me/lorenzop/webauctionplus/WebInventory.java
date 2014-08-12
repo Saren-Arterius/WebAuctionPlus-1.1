@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class WebInventory {
 
@@ -77,20 +78,26 @@ public class WebInventory {
         if (playerName == null || playerName.isEmpty()) {
             throw new NullPointerException();
         }
-        synchronized (WebInventory.openInvs) {
-            if (!WebInventory.openInvs.containsKey(playerName)) {
-                return;
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                if (!WebInventory.openInvs.containsKey(playerName)) {
+                    return;
+                }
+                final WebInventory inventory = WebInventory.openInvs.get(playerName);
+                // save inventory
+                inventory.saveInventory();
+                // remove inventory chest
+                WebInventory.openInvs.remove(playerName);
+                // unlock inventory
+                WebInventory.setLocked(playerName, false);
+                WebAuctionPlus.getLog().info("MailBox inventory closed and saved");
+                player.sendMessage(WebAuctionPlus.chatPrefix + WebAuctionPlus.Lang.getString("mailbox_closed"));
             }
-            final WebInventory inventory = WebInventory.openInvs.get(playerName);
-            // save inventory
-            inventory.saveInventory();
-            // remove inventory chest
-            WebInventory.openInvs.remove(playerName);
-            // unlock inventory
-            WebInventory.setLocked(playerName, false);
-        }
-        WebAuctionPlus.getLog().info("MailBox inventory closed and saved");
-        player.sendMessage(WebAuctionPlus.chatPrefix + WebAuctionPlus.Lang.getString("mailbox_closed"));
+
+        }.runTaskAsynchronously(WebAuctionPlus.getPlugin());
+
     }
 
     public static void ForceCloseAll() {
@@ -307,7 +314,7 @@ public class WebInventory {
             final int itemId = WebInventory.getTypeId(stack);
             final short itemDamage = stack.getDurability();
             final int itemQty = stack.getAmount();
-            final String enchStr = WebItemMeta.encodeItem(stack, player);
+            final String enchStr = WebItemMeta.encodeMeta(stack, player);
 
             // update existing item
             if (tableRowIds.containsKey(i)) {

@@ -13,8 +13,8 @@ public class WebItemMeta {
     }
 
     // encode enchantments for database storage
-    public static String encodeItem(final ItemStack stack, final Player player) {
-        return ItemUtils.encodeMeta(stack);
+    public static String encodeMeta(final ItemStack stack, final Player player) {
+        return ItemUtils.encodeMeta(stack).toJSONString();
     }
 
     // decode enchantments from string

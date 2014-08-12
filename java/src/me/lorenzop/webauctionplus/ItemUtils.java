@@ -1,5 +1,6 @@
 package me.lorenzop.webauctionplus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,6 +10,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONObject;
@@ -53,87 +55,144 @@ public class ItemUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static String encodeMeta(ItemStack stack) {
+    public static JSONObject encodeMeta(ItemStack stack) {
         if (stack == null) {
-            throw new NullPointerException();
+            return null;
         }
-
         final JSONObject metaJson = new JSONObject();
         metaJson.putAll(ItemUtils.serialize(stack.getItemMeta()));
-        final Map<String, Integer> tempEnchantmentMap = new HashMap<String, Integer>();
-        if (stack.getType() == Material.ENCHANTED_BOOK) {
-            final EnchantmentStorageMeta esm = (EnchantmentStorageMeta) stack.getItemMeta();
-            for (final Entry<Enchantment, Integer> entry: esm.getStoredEnchants().entrySet()) {
-                tempEnchantmentMap.put(entry.getKey().getName(), entry.getValue());
-            }
-        } else {
-            for (final Entry<Enchantment, Integer> entry: stack.getEnchantments().entrySet()) {
-                tempEnchantmentMap.put(entry.getKey().getName(), entry.getValue());
-            }
-        }
+
         final JSONObject itemJson = new JSONObject();
-        itemJson.put("item-meta", metaJson.toJSONString());
-        itemJson.put("all-enchants", JSONObject.toJSONString(tempEnchantmentMap));
+        itemJson.put("item-meta", metaJson);
+        return itemJson;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static JSONObject encodeItem(ItemStack stack) {
+        if (stack == null) {
+            return null;
+        }
+        final JSONObject metaJson = new JSONObject();
+        metaJson.putAll(ItemUtils.serialize(stack.getItemMeta()));
+
+        final JSONObject itemJson = new JSONObject();
+        itemJson.put("item-meta", metaJson);
         itemJson.put("item-type", stack.getType().name());
         itemJson.put("item-qty", stack.getAmount());
-        return itemJson.toJSONString();
+        itemJson.put("item-damage", stack.getDurability());
+        return itemJson;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static JSONObject encodeItems(Iterable<ItemStack> items) {
+        final JSONObject contentJson = new JSONObject();
+        final ArrayList<JSONObject> content = new ArrayList<JSONObject>();
+        for (final ItemStack itemStack: items) {
+            content.add(ItemUtils.encodeMeta(itemStack));
+        }
+        contentJson.put("content", content);
+        return contentJson;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static JSONObject encodeItems(ItemStack[] items) {
+        final JSONObject contentJson = new JSONObject();
+        final ArrayList<JSONObject> content = new ArrayList<JSONObject>();
+        for (final ItemStack itemStack: items) {
+            content.add(ItemUtils.encodeMeta(itemStack));
+        }
+        contentJson.put("content", content);
+        return contentJson;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static JSONObject encodeInventory(PlayerInventory inv) {
+        final JSONObject invJson = new JSONObject();
+        invJson.put("content", ItemUtils.encodeItems(inv.getContents()).get("content"));
+        invJson.put("helmet", ItemUtils.encodeMeta(inv.getHelmet()));
+        invJson.put("chestplate", ItemUtils.encodeMeta(inv.getChestplate()));
+        invJson.put("leggings", ItemUtils.encodeMeta(inv.getLeggings()));
+        invJson.put("boots", ItemUtils.encodeMeta(inv.getBoots()));
+        return invJson;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void restoreInventory(PlayerInventory inv, String str) {
+        final Map<String, Object> itemJson = (Map<String, Object>) JSONValue.parse(str);
+        inv.setContents(ItemUtils.restoreItems((ArrayList<JSONObject>) itemJson.get("content")));
+        inv.setHelmet(ItemUtils.restoreItem((Map<String, Object>) itemJson.get("helmet")));
+        inv.setChestplate(ItemUtils.restoreItem((Map<String, Object>) itemJson.get("chestplate")));
+        inv.setLeggings(ItemUtils.restoreItem((Map<String, Object>) itemJson.get("leggings")));
+        inv.setBoots(ItemUtils.restoreItem((Map<String, Object>) itemJson.get("boots")));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static ItemStack[] restoreItems(ArrayList<JSONObject> encodedContent) {
+        final ItemStack[] content = new ItemStack[encodedContent.size()];
+        for (int i = 0; i < content.length; i++) {
+            content[i] = ItemUtils.restoreItem(encodedContent.get(i));
+        }
+        return content;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static ItemStack restoreItem(String string) {
+        return ItemUtils.restoreItem((Map<String, Object>) JSONValue.parse(string));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static ItemStack restoreItem(Map<String, Object> itemJson) {
+        if (itemJson == null) {
+            return null;
+        }
+        final Map<String, Object> metaMap = (Map<String, Object>) itemJson.get("item-meta");
+        final Material itemType = Material.valueOf((String) itemJson.get("item-type"));
+        final Integer itemQty = ((Long) itemJson.get("item-qty")).intValue();
+        final Short itemDamage = ((Long) itemJson.get("item-damage")).shortValue();
+
+        final ItemStack stack = new ItemStack(itemType, itemQty);
+        stack.setDurability(itemDamage);
+        if (stack.getType() == Material.ENCHANTED_BOOK) {
+            final Map<String, Long> enchantmentMap = (Map<String, Long>) metaMap.get("stored-enchants");
+            final EnchantmentStorageMeta esm = (EnchantmentStorageMeta) ItemUtils.deserialize(metaMap);
+            if (enchantmentMap != null) {
+                for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
+                    esm.addStoredEnchant(Enchantment.getByName(entry.getKey()), entry.getValue().intValue(), false);
+                }
+            }
+            stack.setItemMeta(esm);
+        } else {
+            stack.setItemMeta((ItemMeta) ItemUtils.deserialize(metaMap));
+            final Map<String, Long> enchantmentMap = (Map<String, Long>) metaMap.get("enchants");
+            if (enchantmentMap != null) {
+                for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
+                    stack.addUnsafeEnchantment(Enchantment.getByName(entry.getKey()), entry.getValue().intValue());
+                }
+            }
+        }
+        return stack;
     }
 
     @SuppressWarnings("unchecked")
     public static void restoreMeta(ItemStack stack, String string) {
-        Map<String, Long> enchantmentMap = null;
-        Map<String, Object> metaMap = null;
-        final Map<String, String> itemJson = (Map<String, String>) JSONValue.parse(string);
-        for (final Entry<String, String> entry: itemJson.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase("item-meta")) {
-                metaMap = (Map<String, Object>) JSONValue.parse(entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("all-enchants")) {
-                enchantmentMap = (Map<String, Long>) JSONValue.parse(entry.getValue());
-            }
-        }
+        final Map<String, Object> itemJson = (Map<String, Object>) JSONValue.parse(string);
+        final Map<String, Object> metaMap = (Map<String, Object>) itemJson.get("item-meta");
         if (stack.getType() == Material.ENCHANTED_BOOK) {
+            final Map<String, Long> enchantmentMap = (Map<String, Long>) metaMap.get("stored-enchants");
             final EnchantmentStorageMeta esm = (EnchantmentStorageMeta) ItemUtils.deserialize(metaMap);
-            for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
-                esm.addStoredEnchant(Enchantment.getByName(entry.getKey()), entry.getValue().intValue(), false);
+            if (enchantmentMap != null) {
+                for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
+                    esm.addStoredEnchant(Enchantment.getByName(entry.getKey()), entry.getValue().intValue(), false);
+                }
             }
             stack.setItemMeta(esm);
         } else {
             stack.setItemMeta((ItemMeta) ItemUtils.deserialize(metaMap));
-            for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
-                stack.addUnsafeEnchantment(Enchantment.getByName(entry.getKey()), entry.getValue().intValue());
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void restoreMeta(String string) {
-        Map<String, Long> enchantmentMap = null;
-        Map<String, Object> metaMap = null;
-        Material itemType = Material.DIRT;
-        int itemQty = 1;
-        final Map<String, String> itemJson = (Map<String, String>) JSONValue.parse(string);
-        for (final Entry<String, String> entry: itemJson.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase("item-meta")) {
-                metaMap = (Map<String, Object>) JSONValue.parse(entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("all-enchants")) {
-                enchantmentMap = (Map<String, Long>) JSONValue.parse(entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("item-type")) {
-                itemType = Material.valueOf(entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("item-qty")) {
-                itemQty = Integer.valueOf(entry.getValue());
-            }
-        }
-        final ItemStack stack = new ItemStack(itemType, itemQty);
-        if (stack.getType() == Material.ENCHANTED_BOOK) {
-            final EnchantmentStorageMeta esm = (EnchantmentStorageMeta) ItemUtils.deserialize(metaMap);
-            for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
-                esm.addStoredEnchant(Enchantment.getByName(entry.getKey()), entry.getValue().intValue(), false);
-            }
-            stack.setItemMeta(esm);
-        } else {
-            stack.setItemMeta((ItemMeta) ItemUtils.deserialize(metaMap));
-            for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
-                stack.addUnsafeEnchantment(Enchantment.getByName(entry.getKey()), entry.getValue().intValue());
+            final Map<String, Long> enchantmentMap = (Map<String, Long>) metaMap.get("enchants");
+            if (enchantmentMap != null) {
+                for (final Entry<String, Long> entry: enchantmentMap.entrySet()) {
+                    stack.addUnsafeEnchantment(Enchantment.getByName(entry.getKey()), entry.getValue().intValue());
+                }
             }
         }
     }

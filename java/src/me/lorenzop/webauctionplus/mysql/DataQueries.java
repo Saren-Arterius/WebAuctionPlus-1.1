@@ -56,7 +56,7 @@ public class DataQueries extends MySQLConnPool {
                     return null;
                 }
                 final ItemStack stack = new ItemStack(mat, rs.getInt("qty"), rs.getShort("itemDamage"));
-                WebItemMeta.encodeItem(stack, null);
+                WebItemMeta.encodeMeta(stack, null);
                 auction.setItemStack(stack);
                 auction.setItemTitle(rs.getString("itemTitle"));
                 auction.setPlayerName(rs.getString("playerName"));
