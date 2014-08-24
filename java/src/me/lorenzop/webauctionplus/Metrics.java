@@ -373,11 +373,11 @@ public class Metrics {
         final PluginDescriptionFile description = plugin.getDescription();
         final String pluginName = description.getName();
         final boolean onlineMode = Bukkit.getServer().getOnlineMode(); // TRUE
-        // if
-        // online
-        // mode
-        // is
-        // enabled
+                                                                       // if
+                                                                       // online
+                                                                       // mode
+                                                                       // is
+                                                                       // enabled
         final String pluginVersion = description.getVersion();
         final String serverVersion = Bukkit.getVersion();
         final int playersOnline = Bukkit.getServer().getOnlinePlayers().length;

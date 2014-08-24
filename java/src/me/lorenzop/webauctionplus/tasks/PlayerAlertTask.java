@@ -62,7 +62,7 @@ public class PlayerAlertTask implements Runnable {
             final boolean isAdmin = p.hasPermission("wa.webadmin");
             WebAuctionPlus.getLog().info(
                     "Player found - " + playerJoined + " with perms:" + (canBuy ? " canBuy" : "")
-                    + (canSell ? " canSell" : "") + (isAdmin ? " isAdmin" : ""));
+                            + (canSell ? " canSell" : "") + (isAdmin ? " isAdmin" : ""));
             WebAuctionPlus.dataQueries.updatePlayerPermissions(waPlayer, canBuy, canSell, isAdmin);
             // build query
             whereSql += "seller = ?";

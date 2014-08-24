@@ -52,7 +52,7 @@ public class DataQueries extends MySQLConnPool {
                 final Material mat = Material.matchMaterial(Integer.toString(rs.getInt("itemId")));
                 if (mat == null) {
                     (new NullPointerException("Unknown item id: " + Integer.toString(rs.getInt("itemId"))))
-                    .printStackTrace();
+                            .printStackTrace();
                     return null;
                 }
                 final ItemStack stack = new ItemStack(mat, rs.getInt("qty"), rs.getShort("itemDamage"));

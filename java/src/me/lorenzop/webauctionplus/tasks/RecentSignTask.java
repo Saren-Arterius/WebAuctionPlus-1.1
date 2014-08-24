@@ -100,7 +100,7 @@ public class RecentSignTask implements Runnable {
                 // recent signs
                 if (WebAuctionPlus.useOriginalRecent()) {
                     final String[] lines = {strTitle, strQtyPrice, strSeller
-                            // strType
+                    // strType
                     };
                     UpdateRecentSigns(offset, lines);
                 }

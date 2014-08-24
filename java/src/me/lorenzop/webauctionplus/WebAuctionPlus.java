@@ -47,8 +47,8 @@ public class WebAuctionPlus extends JavaPlugin {
 
     private static final String             loggerPrefix               = "[WebAuction+] ";
     public static final String              chatPrefix                 = ChatColor.DARK_GREEN + "[" + ChatColor.WHITE
-            + "WebAuction+" + ChatColor.DARK_GREEN
-            + "] ";
+                                                                               + "WebAuction+" + ChatColor.DARK_GREEN
+                                                                               + "] ";
 
     private static volatile Plugins3rdParty plugins3rd                 = null;
 
@@ -365,7 +365,7 @@ public class WebAuctionPlus extends JavaPlugin {
                 }
                 WebAuctionPlus.getLog().info(
                         "Enabled Task: Shout Sign (using " + (UseMultithreads ? "multiple threads" : "single thread")
-                        + ")");
+                                + ")");
             }
             // update recent signs
             if (recentSignUpdateSeconds > 0 && WebAuctionPlus.useOriginalRecent) {
@@ -379,7 +379,7 @@ public class WebAuctionPlus extends JavaPlugin {
                 }
                 WebAuctionPlus.getLog().info(
                         "Enabled Task: Recent Sign (using " + (UseMultithreads ? "multiple threads" : "single thread")
-                        + ")");
+                                + ")");
             }
         } catch (final Exception e) {
             e.printStackTrace();
