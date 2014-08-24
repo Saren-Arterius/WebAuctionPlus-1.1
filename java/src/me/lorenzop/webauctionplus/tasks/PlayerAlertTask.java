@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,9 +36,9 @@ public class PlayerAlertTask implements Runnable {
         int i = 0;
         // build players online hashmap
         if (playerJoined == null) {
-            final Player[] playersList = Bukkit.getOnlinePlayers();
+            final Collection<? extends Player> playersList = Bukkit.getOnlinePlayers();
             // no players online
-            if (playersList.length == 0) {
+            if (playersList.size() == 0) {
                 return;
             }
             // build query
