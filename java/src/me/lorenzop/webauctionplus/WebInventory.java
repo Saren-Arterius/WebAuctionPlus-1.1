@@ -365,8 +365,8 @@ public class WebInventory {
         tableRowIds.clear();
         WebAuctionPlus.getLog().info(
                 "Updated player inventory for: " + playerName + " [" + " Inserted:" + Integer.toString(countInserted)
-                        + " Updated:" + Integer.toString(countUpdated) + " Deleted:" + Integer.toString(countDeleted)
-                        + " ]");
+                + " Updated:" + Integer.toString(countUpdated) + " Deleted:" + Integer.toString(countDeleted)
+                + " ]");
     }
 
     @SuppressWarnings("deprecation")

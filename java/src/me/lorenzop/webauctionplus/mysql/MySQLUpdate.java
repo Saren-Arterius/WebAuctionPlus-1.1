@@ -49,21 +49,21 @@ public class MySQLUpdate {
             final String[] queries = new String[] {
                     // enchantment/meta fields
                     "ALTER TABLE `" + WebAuctionPlus.dataQueries.dbPrefix()
-                            + "Auctions` CHANGE `enchantments` `enchantments` TEXT NULL DEFAULT NULL",
+                    + "Auctions` CHANGE `enchantments` `enchantments` TEXT NULL DEFAULT NULL",
                     "ALTER TABLE `" + WebAuctionPlus.dataQueries.dbPrefix()
-                            + "Items`    CHANGE `enchantments` `enchantments` TEXT NULL DEFAULT NULL",
+                    + "Items`    CHANGE `enchantments` `enchantments` TEXT NULL DEFAULT NULL",
                     // enums
                     "ALTER TABLE `"
-                            + WebAuctionPlus.dataQueries.dbPrefix()
-                            + "LogSales` CHANGE `logType`  `logType`  ENUM('', 'new', 'sale', 'cancel') NULL DEFAULT NULL",
+                    + WebAuctionPlus.dataQueries.dbPrefix()
+                    + "LogSales` CHANGE `logType`  `logType`  ENUM('', 'new', 'sale', 'cancel') NULL DEFAULT NULL",
                     "ALTER TABLE `" + WebAuctionPlus.dataQueries.dbPrefix()
-                            + "LogSales` CHANGE `saleType` `saleType` ENUM('', 'buynow', 'auction') NULL DEFAULT NULL",
+                    + "LogSales` CHANGE `saleType` `saleType` ENUM('', 'buynow', 'auction') NULL DEFAULT NULL",
                     "ALTER TABLE `"
                             + WebAuctionPlus.dataQueries.dbPrefix()
                             + "LogSales` CHANGE `itemType` `itemType` ENUM('', 'tool', 'map', 'book') NULL DEFAULT NULL",
-                    "ALTER TABLE `"
-                            + WebAuctionPlus.dataQueries.dbPrefix()
-                            + "Players`  CHANGE `Permissions` `Permissions` SET('', 'canBuy', 'canSell', 'isAdmin') NULL DEFAULT NULL"};
+                            "ALTER TABLE `"
+                                    + WebAuctionPlus.dataQueries.dbPrefix()
+                                    + "Players`  CHANGE `Permissions` `Permissions` SET('', 'canBuy', 'canSell', 'isAdmin') NULL DEFAULT NULL"};
             // execute queries
             for (final String sql: queries) {
                 if (sql == null || sql.isEmpty()) {
@@ -106,55 +106,55 @@ public class MySQLUpdate {
         affected += MySQLUpdate.UpdatePotion(8265, 16345); // strength 8:00
         affected += MySQLUpdate.UpdatePotion(8266, 16378); // slow 4:00
         affected += MySQLUpdate.UpdatePotion(16378, 32691); // fire resist
-                                                            // splash 2:15
+        // splash 2:15
         affected += MySQLUpdate.UpdatePotion(16385, 32657); // regen splash 0:33
         affected += MySQLUpdate.UpdatePotion(16386, 32658); // speed splash 2:15
         affected += MySQLUpdate.UpdatePotion(16388, 32660); // poison splash
-                                                            // 0:33
+        // 0:33
         affected += MySQLUpdate.UpdatePotion(16389, 32721); // healing splash
         affected += MySQLUpdate.UpdatePotion(16392, 32696); // weakness splash
-                                                            // 1:07
+        // 1:07
         affected += MySQLUpdate.UpdatePotion(16393, 32665); // strength splash
-                                                            // 2:15
+        // 2:15
         affected += MySQLUpdate.UpdatePotion(16394, 32762); // slow splash 2:15
         affected += MySQLUpdate.UpdatePotion(16396, 32724); // harming splash
         affected += MySQLUpdate.UpdatePotion(16418, 32690); // speed splash 2
-                                                            // 1:07
+        // 1:07
         affected += MySQLUpdate.UpdatePotion(16420, 32692); // poison splash 2
-                                                            // 0:16
+        // 0:16
         affected += MySQLUpdate.UpdatePotion(16421, 32689); // healing splash 2
         affected += MySQLUpdate.UpdatePotion(16425, 32697); // strength splash 2
-                                                            // 1:07
+        // 1:07
         affected += MySQLUpdate.UpdatePotion(16428, 32692); // harming splash 2
         affected += MySQLUpdate.UpdatePotion(16449, 32721); // regen splash 1:30
         affected += MySQLUpdate.UpdatePotion(16450, 32722); // speed splash 6:00
         affected += MySQLUpdate.UpdatePotion(16451, 32755); // fire resist
-                                                            // splash 6:00
+        // splash 6:00
         affected += MySQLUpdate.UpdatePotion(16452, 32724); // poison splash
-                                                            // 1:30
+        // 1:30
         affected += MySQLUpdate.UpdatePotion(16456, 32760); // weakness splash
-                                                            // 3:00
+        // 3:00
         affected += MySQLUpdate.UpdatePotion(16457, 32729); // strength splash
-                                                            // 6:00
+        // 6:00
         affected += MySQLUpdate.UpdatePotion(16458, 32762); // slow splash 3:00
         affected += MySQLUpdate.UpdatePotion(16471, 32689); // regen splash 2
-                                                            // 0:16
+        // 0:16
         // guessing closest matching potion
         affected += MySQLUpdate.UpdatePotion(16369, 32721); // regen splash 2
-                                                            // 1:00
+        // 1:00
         affected += MySQLUpdate.UpdatePotion(16370, 32722); // speed 2 4:00
         affected += MySQLUpdate.UpdatePotion(16372, 32724); // poison 2 1:00
         affected += MySQLUpdate.UpdatePotion(16377, 32729); // strength 2 4:00
         affected += MySQLUpdate.UpdatePotion(32698, 32762); // slowness splash
-                                                            // 1:07
+        // 1:07
         affected += MySQLUpdate.UpdatePotion(32753, 32689); // regen spash 2
-                                                            // 0:45
+        // 0:45
         affected += MySQLUpdate.UpdatePotion(32754, 32722); // speed splash 2
-                                                            // 3:00
+        // 3:00
         affected += MySQLUpdate.UpdatePotion(32756, 32724); // poison splash 2
-                                                            // 0:45
+        // 0:45
         affected += MySQLUpdate.UpdatePotion(32761, 32729); // strength splash 2
-                                                            // 3:00
+        // 3:00
         WebAuctionPlus.getLog().warning("Updated " + Integer.toString(affected) + " potions");
     }
 
