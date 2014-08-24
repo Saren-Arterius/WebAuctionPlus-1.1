@@ -51,7 +51,6 @@ public class Language {
         return isOk;
     }
 
-    @SuppressWarnings("deprecation")
     private void loadLanguageFile(String lang) {
         try {
             // load from plugins folder

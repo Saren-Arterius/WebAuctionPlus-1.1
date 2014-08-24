@@ -6,7 +6,6 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -680,7 +679,7 @@ public class WebAuctionPlus extends JavaPlugin {
 
     // announce radius
     public static void BroadcastRadius(String msg, Location loc, int radius) {
-        final Collection<? extends Player> playerList = Bukkit.getOnlinePlayers();
+        final Player[] playerList = Bukkit.getOnlinePlayers();
         final Double x = loc.getX();
         final Double z = loc.getZ();
         for (final Player player: playerList) {

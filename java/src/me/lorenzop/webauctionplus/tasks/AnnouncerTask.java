@@ -24,7 +24,7 @@ public class AnnouncerTask implements Runnable {
 
     @Override
     public void run() {
-        if (plugin.getServer().getOnlinePlayers().size() == 0) {
+        if (plugin.getServer().getOnlinePlayers().length == 0) {
             return;
         }
         if (announcementMessages.isEmpty()) {
@@ -77,7 +77,7 @@ public class AnnouncerTask implements Runnable {
             // is command
             if (message.startsWith("/")) {
                 server.dispatchCommand(server.getConsoleSender(), message.substring(1));
-            } else if (server.getOnlinePlayers().size() > 0) {
+            } else if (server.getOnlinePlayers().length > 0) {
                 message = WebAuctionPlus.ReplaceColors(chatPrefix + message);
                 server.broadcast(message, "wa.announcer.receive");
             }
